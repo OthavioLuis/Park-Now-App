@@ -14,7 +14,7 @@ export function FormUsers() {
   const [placa, setPlaca] = useState("");
   const [carroceria, setCarroceria] = useState("");
   const [eletrico, setEletrico] = useState(false);
-
+  const [modalVisible, setModalVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [isEditing, setIsEditing] = useState("");
@@ -27,6 +27,8 @@ export function FormUsers() {
   const [modelos, setModelos] = useState([]);
   const [filteredModelos, setFilteredModelos] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
+
+
 
   const user = auth.currentUser;
 
@@ -63,6 +65,13 @@ export function FormUsers() {
     }
   }, [modelo, modelos]);
 
+  useEffect(() => {
+    if (marca === "") {
+      setModelo(""); // Limpa o campo modelo quando o campo marca for apagado
+      setModelos([]); // Limpa a lista de modelos disponíveis
+    }
+  }, [marca]);
+
   const handleMarcaSelect = async (selectedMarca) => {
     setMarca(selectedMarca.nome);
     setFilteredMarca([]);
@@ -82,7 +91,6 @@ export function FormUsers() {
     setModelo(selectedModelo.nome);
     setFilteredModelos([]);
   };
-
 
 
   useEffect(() => {
@@ -272,14 +280,15 @@ export function FormUsers() {
 
       {showForm && (
         <View style={styles.formContainer}>
-          <View style={{ justifyContent: 'flex-start', width: '90%', }}>
-            <Text style={{ marginLeft: 8, marginTop: -8, fontSize: 28, color: "#f28705", fontWeight: 600, }}>
+          <View style={{ justifyContent: 'flex-start', width: '90%' }}>
+            <Text style={{ marginLeft: 8, fontSize: 28, color: "#f28705", fontWeight: '600' }}>
               Veículo
             </Text>
             <Text style={{ marginLeft: 8, marginTop: 8, marginBottom: 10, fontSize: 15, color: "gray" }}>
               Preencha conforme seu veículo
             </Text>
           </View>
+
           <Text style={styles.label}>Marca:</Text>
           <TextInput
             style={styles.inputEditar}
@@ -352,23 +361,24 @@ export function FormUsers() {
               onValueChange={(newValue) => setEletrico(newValue)}
               style={styles.checkbox}
             />
-            <Text style={{ color: 'gray', fontSize: 13, }}>Marque se for elétrico</Text>
+            <Text style={{ color: 'gray', fontSize: 13 }}>Marque se for elétrico</Text>
           </View>
 
-          {isEditing !== "" ? (
-            <TouchableOpacity style={styles.buttonConfirmar} onPress={handleEditUser}>
-              <Text style={styles.buttonText}>Editar carro</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity style={styles.buttonConfirmar} onPress={handleRegister}>
-              <Text style={styles.buttonText}>Adicionar</Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            onPress={isEditing ? handleEditUser : handleRegister}
+            style={[styles.button, { backgroundColor: isFormFilled() ? '#FFA83F' : '#ccc' }]}
+            disabled={!isFormFilled()} // Desativa o botão se o formulário não estiver preenchido corretamente
+          >
+            <Text style={styles.buttonText}>{isEditing ? "Editar Carro" : "Cadastrar Carro"}</Text>
+          </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => {
-            resetForm();
-            setShowForm(false);
-          }} style={styles.buttonFechar}>
+          <TouchableOpacity
+            onPress={() => {
+              resetForm();
+              setShowForm(false);
+            }}
+            style={styles.buttonFechar}
+          >
             <Text style={styles.buttonText}>Fechar formulário</Text>
           </TouchableOpacity>
         </View>
@@ -378,10 +388,8 @@ export function FormUsers() {
         <>
           <View style={styles.boxUsuario}>
             <View>
-              <Text style={{ marginLeft: 8, fontSize: 17, color: "#000" }}>
-                Olá
-              </Text>
-              <Text style={{ marginLeft: 8, fontSize: 24, color: "#f28705", fontWeight: 600, }}>
+              <Text style={{ marginLeft: 8, fontSize: 17, color: "#000" }}>Olá</Text>
+              <Text style={{ marginLeft: 8, fontSize: 24, color: "#f28705", fontWeight: '600' }}>
                 Usuário
               </Text>
             </View>
@@ -394,7 +402,7 @@ export function FormUsers() {
           </View>
 
           <View style={styles.cxHistoricoFrase}>
-            <Text style={{ marginLeft: 8, marginBottom: 10, fontSize: 18, fontWeight: 600, }}>Carros Cadastrados</Text>
+            <Text style={{ marginLeft: 8, marginBottom: 10, fontSize: 18, fontWeight: '600' }}>Carros Cadastrados</Text>
           </View>
 
           <FlatList
@@ -402,60 +410,95 @@ export function FormUsers() {
             data={users}
             keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => (
-              <UsersList
-                data={item}
-                handleEdit={(item) => editUser(item)}
-                handleDelete={(id) => handleDeleteUser(id)}
-              />
+              <View style={styles.item}> {/* Envolva a UsersList em uma View com o estilo apropriado */}
+                <UsersList
+                  data={item}
+                  handleEdit={(item) => editUser(item)}
+                  handleDelete={(id) => handleDeleteUser(id)}
+                />
+              </View>
             )}
+            horizontal={true}
+            // showsHorizontalScrollIndicator={false}
           />
+
         </>
       )}
 
       {isAdmin && (
         <View style={styles.boxAdm}>
-          <Text style={styles.label}>Pesquisar Placa:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Digite a placa do carro..."
-            value={searchQuery}
-            onChangeText={(text) => {
-              setSearchQuery(text.toUpperCase()); // Converte o texto para maiúsculas
-              if (text.length === 0) {
-                handleClearSearch(); // Limpa os resultados quando o campo é limpo
-              }
-            }}
-          />
-          <TouchableOpacity style={styles.button} onPress={handleSearch}>
-            <Text style={styles.buttonText}>Pesquisar</Text>
+          <TouchableOpacity style={styles.buttonPesquisar} onPress={() => setModalVisible(true)}>
+            <Image source={require('../assets/lupa.png')} style={{ width: 30, height: 30 }} />
           </TouchableOpacity>
 
-          {carDetails.length > 0 && (
-            <FlatList
-              data={carDetails}
-              keyExtractor={(item) => String(item.id)}
-              renderItem={({ item }) => (
-                <View style={styles.item}>
-                  <Text>{`Modelo: ${item.modelo}`}</Text>
-                  <Text>{`Marca: ${item.marca}`}</Text>
-                  <Text>{`Placa: ${item.placa}`}</Text>
-                  <Text>{`Carroceria: ${item.carroceria}`}</Text>
-                  <Text>{`Elétrico: ${item.eletrico}`}</Text>
-                  {item.remainingTime > 0 ? (
-                    <Text>{`Tempo Restante: ${formatRemainingTime(item.remainingTime)}`}</Text>
-                  ) : (
-                    <Text>Este carro não está mais alugado.</Text>
-                  )}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalView}>
+                <View style={{ width: '100%', }}>
+                  <Text style={{ fontSize: 24, color: "#f28705", fontWeight: '600' }}>
+                    Pesquisa
+                  </Text>
+                  <Text style={{ fontSize: 17, color: "#000", marginBottom: 20, }}>Pesquise pela placa</Text>
                 </View>
-              )}
-            />
-          )}
+                <TextInput
+                  style={styles.inputPesquisar}
+                  placeholder="Digite a placa do carro..."
+                  value={searchQuery}
+                  onChangeText={(text) => {
+                    setSearchQuery(text.toUpperCase());
+                    if (text.length === 0) {
+                      handleClearSearch(); // Limpa os resultados quando o campo é limpo
+                    }
+                  }}
+                />
+
+                <TouchableOpacity style={styles.buttonPesquisarPlaca} onPress={handleSearch}>
+                  <Text style={styles.buttonText}>Pesquisar</Text>
+                </TouchableOpacity>
+
+                {isSearchActive && (
+                  <TouchableOpacity style={styles.buttonLimpar} onPress={handleClearSearch}>
+                    <Text style={styles.buttonText}>Limpar Pesquisa</Text>
+                  </TouchableOpacity>
+                )}
+
+                <TouchableOpacity style={styles.buttonLimpar} onPress={() => setModalVisible(false)}>
+                  <Text style={styles.buttonText}>Fechar</Text>
+                </TouchableOpacity>
+
+                {carDetails.length > 0 && (
+                  <FlatList
+                    data={carDetails}
+                    keyExtractor={(item) => String(item.id)}
+                    renderItem={({ item }) => (
+                      <View style={styles.item}>
+                        <Text>{`Modelo: ${item.modelo}`}</Text>
+                        <Text>{`Marca: ${item.marca}`}</Text>
+                        <Text>{`Placa: ${item.placa}`}</Text>
+                        <Text>{`Carroceria: ${item.carroceria}`}</Text>
+                        <Text>{`Elétrico: ${item.eletrico}`}</Text>
+                        {item.remainingTime > 0 ? (
+                          <Text>{`Tempo Restante: ${formatRemainingTime(item.remainingTime)}`}</Text>
+                        ) : (
+                          <Text>Este carro não está mais alugado.</Text>
+                        )}
+                      </View>
+                    )}
+                  />
+                )}
+              </View>
+            </View>
+          </Modal>
         </View>
       )}
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -500,6 +543,17 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: "#fff",
   },
+  inputPesquisar: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 4,
+    marginHorizontal: 8,
+    marginBottom: 8,
+    padding: 8,
+    backgroundColor: "#fff",
+    width: '100%',
+  },
   inputEditar: {
     width: '100%',
     borderWidth: 1,
@@ -508,7 +562,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 14,
-    placeholderTextColor: "#0101012",
+    color: "#0101012",
   },
   picker: {
     width: '100%',
@@ -529,17 +583,20 @@ const styles = StyleSheet.create({
   },
   list: {
     marginTop: 10,
+    display: 'flex',
+    flexGrow: 0,
+  },
+  item: {
+    width: 160,
+    flex: 1,
+    height: 150,
+    marginRight: 10,
   },
   buttonLogout: {
     backgroundColor: "#dc3545",
     borderRadius: 4,
     padding: 10,
   },
-  // logoutContainer: {
-  //   position: 'absolute',
-  //   top: 10,
-  //   right: 10,
-  // },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -559,10 +616,11 @@ const styles = StyleSheet.create({
   formContainer: {
     zIndex: 3,
     marginTop: -20,
-    width: '80%',
+    width: '100%',
     backgroundColor: "#f9f9f9",
     padding: 20,
     borderRadius: 10,
+    paddingHorizontal: 50,
   },
   buttonMais: {
     width: 60,
@@ -575,19 +633,21 @@ const styles = StyleSheet.create({
     paddingBottom: 7,
     bottom: 20,
     zIndex: 1,
+    right: 15,
   },
   buttonMaisText: {
     fontSize: 40,
-    fontWeight: 600,
+    fontWeight: '600',
     color: '#fff',
   },
   buttonFechar: {
     backgroundColor: "#8c8c8c",
     borderRadius: 4,
     padding: 10,
-    marginVertical: 10,
-    width: '100%',
-    marginTop: 10,
+    marginHorizontal: 8,
+    width: '95%',
+    marginTop: 8,
+    marginBottom: 200,
   },
   buttonConfirmar: {
     backgroundColor: "#f28705",
@@ -596,8 +656,23 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 10,
   },
+  buttonPesquisarPlaca: {
+    backgroundColor: "#f28705",
+    marginVertical: 10,
+    marginTop: 8,
+    borderRadius: 4,
+    padding: 10,
+    width: '100%',
+  },
+  buttonLimpar: {
+    backgroundColor: '#ccc',
+    marginVertical: 10,
+    marginTop: 8,
+    borderRadius: 4,
+    padding: 10,
+    width: '100%',
+  },
   boxUsuario: {
-    alignItems: 'baseline',
     width: '90%',
     display: 'flex',
     flexDirection: 'row',
@@ -644,6 +719,46 @@ const styles = StyleSheet.create({
     maxHeight: 250,
   },
   boxAdm: {
-
+    padding: 20,
+    marginTop: 20,
+    left: 0,
+    bottom: 0,
+    borderRadius: 10,
+    position: 'absolute',
+  },
+  modalView: {
+    flex: 1,
+    width: '100%',
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    padding: 35,
+    alignItems: "center",
+    paddingBottom: 100,
+  },
+  modalText: {
+    marginBottom: 20,
+    marginTop: 15,
+    textAlign: "center",
+    fontSize: 23,
+    fontWeight: '600',
+    color: '#f28705',
+  },
+  modalOverlay: {
+    flex: 1,
+    alignItems: 'center',
+    textAlign: 'center',
+    backgroundColor: '#f9f9f9',
+    borderRadius: 10,
+    padding: 35,
+    width: '100%',
+    height: '100%',
+  },
+  buttonPesquisar: {
+    borderRadius: 50,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f28705',
   },
 });

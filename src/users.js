@@ -104,6 +104,7 @@ export function UsersList({ data, handleEdit, handleDelete }) {
       horaCompra: format(new Date(currentTime), 'dd/MM/yyyy HH:mm:ss'),
       horaSaida: format(new Date(novoTempoExpiracao), 'dd/MM/yyyy HH:mm:ss'),
       metodoPagamento: paymentMethod, // Inclui o método de pagamento
+      uid: data.id,
     };
 
     await updateDoc(doc(db, "users", data.id), {
@@ -135,10 +136,10 @@ export function UsersList({ data, handleEdit, handleDelete }) {
       <View style={styles.placa}>
         <View style={styles.placaCima}>
           <Image source={require('../assets/mercosul-Photoroom.png')} style={styles.bandeira} />
-          <Text style={{ color: '#fff', fontWeight: 600, }}>BRASIL</Text>
+          <Text style={{ color: '#fff', fontWeight: '600', }}>BRASIL</Text>
           <Image source={require('../assets/br.png')} style={styles.bandeira} />
         </View>
-        <Text style={{ color: '#000', fontWeight: 600, fontSize: 18, }}>{data.placa}</Text>
+        <Text style={{ color: '#000', fontWeight: '600', fontSize: 18, }}>{data.placa}</Text>
       </View>
 
       {expirationTime > new Date().getTime() && (
@@ -195,7 +196,7 @@ export function UsersList({ data, handleEdit, handleDelete }) {
       >
         <View style={styles.modalHoras}>
           <View style={{ justifyContent: 'flex-start', width: '90%', }}>
-            <Text style={{ marginLeft: 8, fontSize: 28, color: "#f28705", fontWeight: 600, }}>
+            <Text style={{ marginLeft: 8, fontSize: 28, color: "#f28705", fontWeight: '600', }}>
               Calcular Horário
             </Text>
             <Text style={{ marginLeft: 8, marginTop: 8, marginBottom: 20, fontSize: 15, color: "gray" }}>
@@ -249,7 +250,7 @@ export function UsersList({ data, handleEdit, handleDelete }) {
       >
         <View style={styles.modalView}>
           <View style={{ justifyContent: 'flex-start', width: '90%', }}>
-            <Text style={{ marginLeft: 8, fontSize: 28, color: "#f28705", fontWeight: 600, }}>
+            <Text style={{ marginLeft: 8, fontSize: 28, color: "#f28705", fontWeight: '600', }}>
               Revisão
             </Text>
             <Text style={{ marginLeft: 8, marginTop: 2, marginBottom: 20, fontSize: 15, color: "gray" }}>
@@ -312,7 +313,7 @@ export function UsersList({ data, handleEdit, handleDelete }) {
       >
         <View style={styles.modalView}>
           <View style={{ justifyContent: 'flex-start', width: '90%', }}>
-            <Text style={{ marginLeft: 8, fontSize: 28, color: "#f28705", fontWeight: 600, }}>
+            <Text style={{ marginLeft: 8, fontSize: 28, color: "#f28705", fontWeight: '600', }}>
               Comprovante
             </Text>
             <Text style={{ marginLeft: 8, marginTop: 2, marginBottom: 20, fontSize: 15, color: "gray" }}>
@@ -331,7 +332,9 @@ export function UsersList({ data, handleEdit, handleDelete }) {
               <Text style={styles.comprovText}>Hora de Saída: {receiptData.horaSaida}</Text>
               <Text style={styles.comprovText}>Método de Pagamento: {receiptData.metodoPagamento}</Text>
               <View style={{ marginTop: 14, alignItems: 'center', width: '100%', }}>
+
                 <Image source={require('../assets/barras.png')} style={{ maxWidth: 300, height: 40, }} />
+                <Text style={{fontSize: 15}}> {receiptData.uid}</Text>
               </View>
             </>
           ) : (
@@ -368,7 +371,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: '50%',
     fontSize: 19,
-    fontWeight: 600,
+    fontWeight: '600',
   },
   item: {
     color: "#000",
@@ -414,7 +417,7 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     textAlign: 'center',
     fontSize: 15,
-    fontWeight: 600,
+    fontWeight: '600',
   },
   buttonEdit: {
     backgroundColor: "#000",
@@ -438,14 +441,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 35,
     alignItems: "baseline",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   modalHoras: {
     flex: 1,
@@ -474,7 +469,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     textAlign: "center",
     fontSize: 23,
-    fontWeight: 600,
+    fontWeight: '600',
     color: '#f28705',
   },
   modalPalavra: {
@@ -525,12 +520,12 @@ const styles = StyleSheet.create({
   result: {
     marginTop: 16,
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   resultTotal: {
     padding: 10,
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   paymentOptions: {
     marginTop: 20,

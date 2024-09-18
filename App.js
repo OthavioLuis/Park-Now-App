@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     placeholderTextColor: "#0101012",
   },
   button: {
-    backgroundColor: "#f25c05",
+    backgroundColor: "#f28705",
     width: '90%',
     padding: 12,
     borderRadius: 5,
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 20,
     marginBottom: 20,
-    color: "#fff",
+    color: "#271419",
   },
   modalOverlay: {
     flex: 1,
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: "#261419",
   },
   modalInput: {
