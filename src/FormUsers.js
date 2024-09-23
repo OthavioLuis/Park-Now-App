@@ -29,7 +29,6 @@ export function FormUsers() {
   const [isSearchActive, setIsSearchActive] = useState(false);
 
 
-
   const user = auth.currentUser;
 
   useEffect(() => {
@@ -393,7 +392,6 @@ export function FormUsers() {
                 Usuário
               </Text>
             </View>
-            <Image source={require('../assets/logo.png')} style={{ width: 70, height: 70 }} />
             <View style={styles.logoutContainer}>
               <TouchableOpacity style={styles.buttonLogout} onPress={handleLogout}>
                 <Text style={styles.buttonText}>Sair</Text>
@@ -410,18 +408,13 @@ export function FormUsers() {
             data={users}
             keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => (
-              <View style={styles.item}> {/* Envolva a UsersList em uma View com o estilo apropriado */}
-                <UsersList
-                  data={item}
-                  handleEdit={(item) => editUser(item)}
-                  handleDelete={(id) => handleDeleteUser(id)}
-                />
-              </View>
+              <UsersList
+                data={item}
+                handleEdit={(item) => editUser(item)}
+                handleDelete={(id) => handleDeleteUser(id)}
+              />
             )}
-            horizontal={true}
-            // showsHorizontalScrollIndicator={false}
           />
-
         </>
       )}
 
@@ -439,7 +432,7 @@ export function FormUsers() {
           >
             <View style={styles.modalOverlay}>
               <View style={styles.modalView}>
-                <View style={{ width: '100%', }}>
+                <View style={{width: '100%',}}>
                   <Text style={{ fontSize: 24, color: "#f28705", fontWeight: '600' }}>
                     Pesquisa
                   </Text>
@@ -476,16 +469,16 @@ export function FormUsers() {
                     data={carDetails}
                     keyExtractor={(item) => String(item.id)}
                     renderItem={({ item }) => (
-                      <View style={styles.item}>
-                        <Text>{`Modelo: ${item.modelo}`}</Text>
-                        <Text>{`Marca: ${item.marca}`}</Text>
-                        <Text>{`Placa: ${item.placa}`}</Text>
-                        <Text>{`Carroceria: ${item.carroceria}`}</Text>
-                        <Text>{`Elétrico: ${item.eletrico}`}</Text>
+                      <View style={styles.pqs}>
+                        <Text style={styles.apPes}>{`Modelo: ${item.modelo}`}</Text>
+                        <Text style={styles.apPes}>{`Marca: ${item.marca}`}</Text>
+                        <Text style={styles.apPes}>{`Placa: ${item.placa}`}</Text>
+                        <Text style={styles.apPes}>{`Carroceria: ${item.carroceria}`}</Text>
+                        <Text style={styles.apPes}>{`Elétrico: ${item.eletrico}`}</Text>
                         {item.remainingTime > 0 ? (
-                          <Text>{`Tempo Restante: ${formatRemainingTime(item.remainingTime)}`}</Text>
+                          <Text style={styles.apPes}>{`Tempo Restante: ${formatRemainingTime(item.remainingTime)}`}</Text>
                         ) : (
-                          <Text>Este carro não está mais alugado.</Text>
+                          <Text style={styles.apPes}>Este carro não está mais alugado.</Text>
                         )}
                       </View>
                     )}
@@ -568,7 +561,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
+    borderRadius: 9,
     marginBottom: 14,
     padding: 10,
   },
@@ -583,14 +576,6 @@ const styles = StyleSheet.create({
   },
   list: {
     marginTop: 10,
-    display: 'flex',
-    flexGrow: 0,
-  },
-  item: {
-    width: 160,
-    flex: 1,
-    height: 150,
-    marginRight: 10,
   },
   buttonLogout: {
     backgroundColor: "#dc3545",
@@ -687,8 +672,8 @@ const styles = StyleSheet.create({
   apiMarca: {
     position: 'absolute',
     backgroundColor: '#fff',
-    width: '85%',
-    marginTop: 130,
+    width: '100%',
+    marginTop: '51%',
     zIndex: 4,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -697,15 +682,15 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 0,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
-    marginLeft: 3,
+    marginLeft: '16%',
     padding: 8,
     maxHeight: 300,
   },
   apiModelo: {
     position: 'absolute',
     backgroundColor: '#fff',
-    width: '85%',
-    marginTop: 206,
+    width: '100%',
+    marginTop: '81%',
     zIndex: 4,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -714,7 +699,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 0,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
-    marginLeft: 3,
+    marginLeft: '16%',
     padding: 8,
     maxHeight: 250,
   },
@@ -760,5 +745,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f28705',
+  },
+  pqs: {
+    margin: 10,
+    padding: 15,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    elevation: 3, // Para adicionar sombra no Android
+    shadowColor: '#000', // Para adicionar sombra no iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  apPes: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 5,
   },
 });

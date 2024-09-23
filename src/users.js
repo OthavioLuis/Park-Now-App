@@ -372,6 +372,17 @@ const styles = StyleSheet.create({
     borderRadius: '50%',
     fontSize: 19,
     fontWeight: '600',
+    // Sombra para iOS
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,
   },
   item: {
     color: "#000",
@@ -384,26 +395,62 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingBottom: 10,
     paddingRight: 20,
-    borderRadius: 4,
+    borderRadius: 8,
     marginTop: 25,
+
+    // Sombra para iOS
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,
   },
   buttonUsePlaca: {
     backgroundColor: "#f28705",
     alignSelf: "center",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 4,
+    borderRadius: 8,
     marginTop: 10,
     width: '90%',
+    
+    // Sombra para iOS
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,
   },
   buttonComprovante: {
     backgroundColor: "#f28705",
     alignSelf: "center",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 4,
+    borderRadius: 8,
     marginVertical: 10,
     width: '90%',
+
+    // Sombra para iOS
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,
   },
   buttonText: {
     color: "#fff",
@@ -423,15 +470,39 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     alignSelf: "flex-start",
     padding: 4,
-    borderRadius: 4,
+    borderRadius: 8,
     marginTop: 16,
+
+    // Sombra para iOS
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,
   },
   buttonUse: {
     backgroundColor: "#007BFF",
     alignSelf: "flex-start",
     padding: 4,
-    borderRadius: 4,
+    borderRadius: 8,
     marginTop: 16,
+
+    // Sombra para iOS
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,
   },
   modalView: {
     flex: 1,
@@ -444,8 +515,8 @@ const styles = StyleSheet.create({
   },
   modalHoras: {
     flex: 1,
+    paddingTop: '30%',
     alignItems: 'center',
-    margin: 20,
     backgroundColor: '#f9f9f9',
     borderRadius: 10,
     padding: 35,
@@ -463,6 +534,17 @@ const styles = StyleSheet.create({
   },
   fecharComprov: {
     width: '90%',
+    // Sombra para iOS
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,
   },
   modalText: {
     marginBottom: 20,
@@ -495,8 +577,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 10,
-    width: 50,
-    height: 50,
+    width: '10',
+    height: '50',
     justifyContent: 'center',
     alignItems: 'center',
   },
