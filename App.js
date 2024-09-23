@@ -4,6 +4,7 @@ import { auth, db } from './src/firebaseConnection';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { FormUsers } from './src/FormUsers';
+import TelaInicial from './src/Inicio';
 
 export default function App() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ export default function App() {
   const [modalVisible, setModalVisible] = useState(false);
   const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
   
 // Função para formatar a data de nascimento
 const formatDate = (text) => {
@@ -134,6 +136,12 @@ const handleBirthDateChange = (text) => {
     );
   }
 
+  if (!showLogin) {
+    return (
+      <TelaInicial onStartPress={() => setShowLogin(true)} />
+    );
+  }
+
   return (
     <View style={styles.container}>
       {loading && <Text style={styles.loadingText}>Carregando informações...</Text>}
@@ -247,9 +255,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 200,
-    height: 200,
-    marginTop: -20,
+    width: 150,
+    height: 150,
+    marginBottom: 10,
   },
   logoText: {
     fontSize: 24,
@@ -262,19 +270,43 @@ const styles = StyleSheet.create({
     width: '90%',
     borderWidth: 1,
     borderColor: '#fff',
-    borderRadius: 5,
+    borderRadius: 8,
     padding: 10,
     marginBottom: 14,
     backgroundColor: '#fff',
     placeholderTextColor: "#0101012",
+
+    // Sombra para iOS
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,
   },
   button: {
-    backgroundColor: "#f28705",
+    backgroundColor: "#f25c05",
     width: '90%',
     padding: 12,
-    borderRadius: 5,
+    borderRadius: 8,
     marginBottom: 10,
     alignItems: 'center',
+
+    // Sombra para iOS
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,
   },
   buttonText: {
     color: "#FFF",
@@ -283,7 +315,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 20,
     marginBottom: 20,
-    color: "#271419",
+    color: "#fff",
   },
   modalOverlay: {
     flex: 1,
