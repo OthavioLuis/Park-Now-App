@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated, Image } from 'react-native';
 
-const TelaInicial = ({ onStartPress }) => {
+const Carregar = ({ onStartPress }) => {
     const logoPosition = useRef(new Animated.Value(0)).current;
     const [logoImage, setLogoImage] = React.useState(require('../assets/carro-logo.png'));
 
@@ -17,7 +17,7 @@ const TelaInicial = ({ onStartPress }) => {
 
     const translateX = logoPosition.interpolate({
         inputRange: [0, 1],
-        outputRange: [-200, 0],
+        outputRange: [-400, 0],
     });
 
     return (
@@ -26,11 +26,6 @@ const TelaInicial = ({ onStartPress }) => {
                 source={logoImage}
                 style={[styles.logo, { transform: [{ translateX }] }]}
             />
-            <Text style={styles.logoText}>Park Now</Text>
-
-            <TouchableOpacity style={styles.button} onPress={onStartPress}>
-                <Text style={styles.buttonText}>Ir para o Login</Text>
-            </TouchableOpacity>
         </View>
     );
 };
@@ -43,8 +38,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#f9f9f9',
     },
     logo: {
-        width: 200,
-        height: 200,
+        marginTop: '100',
+        width: 70,
+        height: 70,
         marginBottom: 20,
     },
     logoText: {
@@ -78,4 +74,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default TelaInicial;
+export default Carregar;
